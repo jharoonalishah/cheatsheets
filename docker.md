@@ -15,30 +15,29 @@ docker build [options] .
   --build-arg APP_HOME=$APP_HOME    # Set build-time variables
 ```
 
-Create an `image` from a Dockerfile.
-
-
-### `docker run`
+### `docker container run`
 
 ```yml
-docker run [options] IMAGE
+docker container run [OPTIONS] IMAGE [COMMAND] [ARG...]
   # see `docker create` for options
 ```
+
+Create an `image` from a Dockerfile.
 
 #### Example
 
 ```
-$ docker run -it debian:buster /bin/bash
+$ docker container run -it debian:buster /bin/bash
 ```
 Run a command in an `image`.
 
 Manage containers
 -----------------
 
-### `docker create`
+### `docker container create`
 
 ```yml
-docker create [options] IMAGE
+docker container create [OPTIONS] IMAGE [COMMAND] [ARG...]
   -a, --attach               # attach stdout/err
   -i, --interactive          # attach stdin (interactive)
   -t, --tty                  # pseudo-tty
@@ -54,7 +53,7 @@ docker create [options] IMAGE
 #### Example
 
 ```
-$ docker create --name app_redis_1 \
+$ docker container create --name app_redis_1 \
   --expose 6379 \
   redis:3.0.2
 ```
@@ -64,7 +63,7 @@ Create a `container` from an `image`.
 ### `docker exec`
 
 ```yml
-docker exec [options] CONTAINER COMMAND
+docker container exec [OPTIONS] CONTAINER COMMAND [ARG...]
   -d, --detach        # run in background
   -i, --interactive   # stdin
   -t, --tty           # interactive
@@ -73,43 +72,45 @@ docker exec [options] CONTAINER COMMAND
 #### Example
 
 ```
-$ docker exec app_web_1 tail logs/development.log
-$ docker exec -t -i app_web_1 rails c
+$ docker container exec app_web_1 tail logs/development.log
+$ docker container exec -t -i app_web_1 rails c
 ```
 
-Run commands in a `container`.
+Run commands in a running `container`.
 
 
-### `docker start`
+### `docker container start`
 
 ```yml
-docker start [options] CONTAINER
+docker container start [OPTIONS] CONTAINER [CONTAINER...]
   -a, --attach        # attach stdout/err
   -i, --interactive   # attach stdin
 
-docker stop [options] CONTAINER
+docker container stop [OPTIONS] CONTAINER [CONTAINER...]
 ```
 
 Start/stop a `container`.
 
 
-### `docker ps`
+### `docker container ps`
 
 ```
-$ docker ps
-$ docker ps -a
-$ docker kill $ID
+$ docker container ps
+$ docker container ps -a
+$ docker container kill $ID
 ```
+#### `Aliases`
+ls, ps, list
 
 Manage `container`s using ps/kill.
 
 
-### `docker logs`
+### `docker container logs`
 
 ```
-$ docker logs $ID
-$ docker logs $ID 2>&1 | less
-$ docker logs -f $ID # Follow log output
+$ docker container logs $ID
+$ docker container logs $ID 2>&1 | less
+$ docker container logs -f $ID # Follow log output
 ```
 
 See what's being logged in an `container`.
@@ -128,7 +129,8 @@ $ docker images
 ```
 
 ```sh
-$ docker images -a   # also show intermediate
+$ docker images -a        # also show intermediate
+$ docker images --quiet   # Only show image IDs
 ```
 
 Manages `image`s.
@@ -161,7 +163,7 @@ Additionally remove any stopped containers and all unused images (not just dangl
 
 ```sh
 # Stop all running containers
-docker stop $(docker ps -a -q)
+docker container stop $(docker container ps -a -q)
 
 # Delete stopped containers
 docker container prune
